@@ -136,7 +136,7 @@ while True:
                         SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString,
                                            webhook)
                     else:
-                        SendDiscordMessage(ItemName, ItemColor, oldPrice, 'Sold Out', ItemLink, ItemPicture, oldSizes,
+                        SendDiscordMessage(ItemName, ItemColor, oldPrice, 'Sold Out', ItemLink, ItemPicture, '',
                                            webhook)
                     ItemList.pop(index)
                     ItemList.append(temp)
