@@ -1,11 +1,18 @@
 import requests
 import discord
 import datetime
+import pickle
+from os import path
 from discord import Webhook, RequestsWebhookAdapter
 from bs4 import BeautifulSoup
 from siteItem import SiteItem
 
-ItemList = []
+if path.exists('item_list.dat'):
+    filehandler = open('item_list.dat', 'rb')
+    ItemList = pickle.load(filehandler)
+else:
+    ItemList = []
+
 SupremeLinks = ['jackets', 'shirts', 'tops_sweaters', 'pants', 'shorts', 'bags', 'hats', 'accessories', 'shoes',
                 'skate']
 client = discord.Client()
@@ -86,10 +93,6 @@ switcher = {
     'shoes': shoes,
     'skate': skate
 }
-# webhook = switcher.get('jackets')
-# webhook.send('Bruh',username = 'Sneaker Alphas')
-
-# SendDiscordMessage('Big Letter Track Jacket', 'Black', '$150', 'Sold Out', 'https://www.supremenewyork.com/shop/jackets/p7z6mv4ur/dcpah7svl', 'https://assets.supremenewyork.com/184948/vi/Pwdr-0riLL8.jpg', 'Medium|Small', webhook)
 
 while True:
     for supremelink in SupremeLinks:
@@ -154,3 +157,6 @@ while True:
                     SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture, sizeString,
                                        webhook)
                 ItemList.append(temp)
+    file = open('item_list.dat', 'wb')
+    pickle.dump(ItemList, file)
+    file.close()
