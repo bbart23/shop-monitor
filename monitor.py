@@ -96,7 +96,7 @@ switcher = {
 
 while True:
     for supremelink in SupremeLinks:
-        print('Looking at' + supremelink)
+        print('Looking at ' + supremelink)
         webhook = switcher.get(supremelink)
         page = requests.get(URL + supremelink)
         soup = BeautifulSoup(page.content, 'html.parser')
@@ -105,12 +105,12 @@ while True:
         item_elems = results.find_all(class_='inner-article')
         for article in item_elems:
             ItemName = article.find(class_='product-name').find(class_='name-link').text
-            print(ItemName)
+            #print(ItemName)
             ItemColor = article.find(class_='product-style').find(class_='name-link').text
             SoldOut = IsElementPresent(article)
             ItemLink = 'https://www.supremenewyork.com/' + article.find('a').get('href')
             ItemPicture = 'https:' + article.find('img').get('src')
-            print(ItemPicture)
+            #print(ItemPicture)
 
             temp = SiteItem(ItemName, ItemColor, SoldOut)
             index = ExistsInList(temp)
