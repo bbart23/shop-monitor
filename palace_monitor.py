@@ -2,6 +2,7 @@ import requests
 import discord
 import datetime
 import pickle
+import time
 from os import path
 from discord import Webhook, RequestsWebhookAdapter
 from bs4 import BeautifulSoup
@@ -162,3 +163,4 @@ while True:
     file = open('palace_list.dat', 'wb')
     pickle.dump(ItemList, file)
     file.close()
+    time.sleep(5)
