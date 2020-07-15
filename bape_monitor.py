@@ -104,10 +104,12 @@ while True:
 
                 temp = SiteItem(ItemName, '', SoldOut)
                 index = ExistsInList(temp)
+                # If the item exists in the list
                 if index != -1:
                     oldSoldOut = ItemList[index].SoldOut
                     oldPrice = ItemList[index].Price
                     oldSizes = ItemList[index].Sizes
+                    oldColor = ItemList[index].Color
 
                     if SoldOut != oldSoldOut:
                         if not SoldOut:
@@ -135,7 +137,7 @@ while True:
                             SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString,
                                                webhook)
                         else:
-                            SendDiscordMessage(ItemName, ItemColor, oldPrice, 'Sold Out', ItemLink, ItemPicture, '',
+                            SendDiscordMessage(ItemName, oldColor, oldPrice, 'Sold Out', ItemLink, ItemPicture, '',
                                                webhook)
                         ItemList.pop(index)
                         ItemList.append(temp)
