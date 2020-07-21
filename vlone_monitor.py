@@ -89,7 +89,7 @@ while True:
             SoldOut = IsElementPresent(article)
             ItemLink = 'https://livevlonedievlone.myshopify.com' + article.find(class_='product-item__link').get('href')
             ItemPicture = 'https:' + article.find('img').get('src')
-            ItemPrice = article.find(class_='product-item__price-wrapper').text
+            #ItemPrice = article.find(class_='product-item__price-wrapper').text
             #print(ItemPicture)
 
             temp = SiteItem(ItemName, ItemColor, SoldOut)
@@ -104,6 +104,7 @@ while True:
                         page2 = requests.get(ItemLink)
                         print(ItemLink)
                         soup2 = BeautifulSoup(page2.content, 'html.parser')
+                        ItemPrice = soup2.find(class_='product__price--reg js-price').text
                         temp.Price = ItemPrice
                         sizeString = ''
                         if not SoldOut:
@@ -126,6 +127,7 @@ while True:
             else:
                 page2 = requests.get(ItemLink)
                 soup2 = BeautifulSoup(page2.content, 'html.parser')
+                ItemPrice = soup2.find(class_='product__price--reg js-price').text
                 temp.Price = ItemPrice
                 sizeString = ''
                 if not SoldOut:
