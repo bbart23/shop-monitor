@@ -5,6 +5,7 @@ class SiteItem:
 	Price = ""
 	Sizes = ""
 	Picture = ""
+	Link = ""
 
 	def __init__(self, name, color, soldout):
 		self.Name = name
@@ -13,3 +14,4 @@ class SiteItem:
 		self.Price = ""
 		self.Sizes = ""
 		self.Picture = ""
+		self.Link = ""

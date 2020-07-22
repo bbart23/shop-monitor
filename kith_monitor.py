@@ -1,22 +1,18 @@
 import requests
+import pickle
 import discord
 import datetime
-import pickle
-from os import path
+import time
+import re
 from discord import Webhook, RequestsWebhookAdapter
-from bs4 import BeautifulSoup
 from siteItem import SiteItem
+from os import path
 
 if path.exists('kith_list.dat'):
     filehandler = open('kith_list.dat', 'rb')
     ItemList = pickle.load(filehandler)
 else:
     ItemList = []
-
-KithLinks = ['tees', 'crewnecks', 'headwear', 'hoodies', 'outerwear', 'pants', 'shorts', 'sneakers', 'socks',
-             'lifestyle', 'accessories', 'button-ups', 'onesies']
-client = discord.Client()
-URL = 'https://kith.com/collections/kith-monday-program/'
 
 teesHook = 'https://discordapp.com/api/webhooks/735546285670793286/L-xeCHvD3cVAJcmKT3tY02VmRn8tdC7yKHUzcbgFGw-fOA4mn3m2tIeZoSYd7LtNTRzk'
 crewnecksHook = 'https://discordapp.com/api/webhooks/735546415572320318/tSJyCVZIfUhzUqlUkH_RVn1kQdSwsXvUREJe6rP1grF_c4qSB3MG0chJlz9irat-1aNV'
@@ -54,7 +50,6 @@ def ExistsInList(item):
             return ind
     return -1
 
-
 def SendDiscordMessage(itemName, itemColor, price, availability, URL, imageURL, sizes, webhook):
     Desc = '**Shop:** [Kith Monday Program (US)](https://kith.com/collections/kith-monday-program/)\n**Color:** ' + itemColor + '\n**Price:** ' + price + '\n**State:** ' + availability + '\n\n> QuickTask\n> [' + sizes + '](' + URL + ')';
     Color = 12726577
@@ -64,118 +59,71 @@ def SendDiscordMessage(itemName, itemColor, price, availability, URL, imageURL, 
     embed.set_footer(text=Footer)
     webhook.send(embed=embed, username='Sneaker Alphas')
 
-
-def IsElementPresent(element):
-    soldOut = element.find(class_='sold-out')
-    if soldOut is None:
-        return False
-    return True
-
-
 switcher = {
-    'tees': tees,
-    'crewnecks': crewnecks,
-    'headwear': headwear,
-    'hoodies': hoodies,
-    'outerwear': outerwear,
-    'pants': pants,
-    'shorts': shorts,
-    'sneakers': sneakers,
-    'socks': socks,
-    'lifestyle': lifestyle,
-    'accessories': accessories,
-    'button-ups': buttonups,
-    'onesies': onesies
+    'Tees': tees,
+    'Crewnecks': crewnecks,
+    'Headwear': headwear,
+    'Hoodies': hoodies,
+    'Outerwear': outerwear,
+    'Pants': pants,
+    'Shorts': shorts,
+    'Sneakers': sneakers,
+    'Socks': socks,
+    'Lifestyle': lifestyle,
+    'Accessories': accessories,
+    'Button Ups': buttonups,
+    'Onesies': onesies
 }
 
 while True:
-    for kithlink in KithLinks:
-        print(URL + kithlink)
-        page = requests.get(URL + kithlink)
-        pageNum = 1
-        while(True):
-            print('Looking at ' + kithlink + ' Page ' + str(pageNum))
-            webhook = switcher.get(kithlink)
-            soup = BeautifulSoup(page.content, 'html.parser')
-            results = soup.find(class_='collection-products')
+    time.sleep(2)
+    request = requests.get('https://kith.com/collections/kith-monday-program/products.json?limit=250&page=1#')
 
-            item_elems = results.find_all('li')
-            for article in item_elems:
-                if article.find(class_='product-card__title') is None:
-                    break;
-                ItemName = article.find(class_='product-card__title').text
-                #print(ItemName)
-                ItemColor = article.find(class_='product-card__color').text
-                SoldOut = IsElementPresent(article)
-                ItemLink = 'https://kith.com' + article.find('a').get('href')
-                #print(ItemPicture)
-                #print(ItemLink)
-                temp = SiteItem(ItemName, ItemColor, SoldOut)
-                index = ExistsInList(temp)
-                if index != -1:
-                    oldSoldOut = ItemList[index].SoldOut
-                    oldPrice = ItemList[index].Price
-                    oldSizes = ItemList[index].Sizes
-                    oldPicture = ItemList[index].Picture
+    decodedJson = request.json()
 
-                    if SoldOut != oldSoldOut:
-                        if not SoldOut:
-                            page2 = requests.get(ItemLink)
-                            soup2 = BeautifulSoup(page2.content, 'html.parser')
-                            ItemPicture = 'https:' + soup2.find(class_='ratio-box').find('img').get('src')
-                            #print(ItemPicture)
-                            ItemPrice = soup2.find(class_='product-form').find(class_='btn product-form__add-to-cart').find('span').text
-                            temp.Picture = ItemPicture
-                            temp.Price = ItemPrice
-                            sizeString = ""
-                            if soup2.find(class_='swatch clearfix') is None:
-                                sizeString = 'F'
-                            else:
-                                sizes = soup2.find(class_='swatch clearfix').find_all('span')
-                                for size in sizes:
-                                    if sizeString == "":
-                                        sizeString += size.text
-                                    else:
-                                        sizeString += '|' + size.text
-                            temp.Sizes = sizeString
-                            SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString,
-                                               webhook)
-                        else:
-                            SendDiscordMessage(ItemName, ItemColor, oldPrice, 'Sold Out', ItemLink, oldPicture, '',
-                                               webhook)
-                        ItemList.pop(index)
-                        ItemList.append(temp)
+    for product in decodedJson['products']:
+        webhook = switcher.get(product['product_type'])
+
+        ItemName, ItemColor = product['title'].split(' - ')
+        print(ItemName)
+        SoldOut = True
+        sizeString = ''
+        for variant in product['variants']:
+            #print(variant['available'])
+            if variant['available'] == True:
+                SoldOut = False
+                if sizeString == '':
+                    sizeString += variant['title']
                 else:
-                    page2 = requests.get(ItemLink)
-                    soup2 = BeautifulSoup(page2.content, 'html.parser')
-                    ItemPicture = 'https:' + soup2.find(class_='ratio-box').find('img').get('src')
-                    #print(ItemPicture)
-                    ItemPrice = soup2.find(class_='product-form').find(class_='btn product-form__add-to-cart').find('span').text
-                    temp.Picture = ItemPicture
-                    temp.Price = ItemPrice
+                    sizeString += '|' + variant['title']
 
-                    if not SoldOut:
-                        sizeString = ""
-                        if soup2.find(class_='swatch clearfix') is None:
-                            sizeString = 'F'
-                        else:
-                            sizes = soup2.find(class_='swatch clearfix').find_all('span')
-                            for size in sizes:
-                                if sizeString == "":
-                                    sizeString += size.text
-                                else:
-                                    sizeString += '|' + size.text
-                        temp.Sizes = sizeString
-                        SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture, sizeString,
-                                           webhook)
-                    ItemList.append(temp)
-            pagination = soup.find(class_='pagination').find('a')
-            if pagination is None:
-                break;
-            else:
-                nextLink = pagination.get('href')
-                page = requests.get('https://kith.com' + nextLink)
-                pageNum += 1
+        ItemPicture = product['images'][0]['src']
+        ItemPrice = '$' + product['variants'][0]['price']
+        ItemLink = 'https://kith.com/collections/kith-monday-program/products/' + product['handle']
+        temp = SiteItem(ItemName, ItemColor, SoldOut)
+
+
+        index = ExistsInList(temp)
+
+        # If item already exists in list
+        if index != -1:
+            oldSoldOut = ItemList[index].SoldOut
+
+            if SoldOut != oldSoldOut:
+                if not SoldOut:
+                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString, webhook)
+                else:
+                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'Sold Out', ItemLink, ItemPicture, sizeString, webhook)
+                ItemList.pop(index)
+                ItemList.append(temp)
+        else:
+            if not SoldOut:
+                SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture, sizeString, webhook)
+            ItemList.append(temp)
+
+
+
+    #print(decodedJson['products'][0]['title'])
     file = open('kith_list.dat', 'wb')
     pickle.dump(ItemList, file)
     file.close()
