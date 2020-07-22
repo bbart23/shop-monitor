@@ -4,6 +4,7 @@ class SiteItem:
 	SoldOut = False
 	Price = ""
 	Sizes = ""
+	Picture = ""
 
 	def __init__(self, name, color, soldout):
 		self.Name = name
@@ -11,3 +12,4 @@ class SiteItem:
 		self.SoldOut = soldout
 		self.Price = ""
 		self.Sizes = ""
+		self.Picture = ""
