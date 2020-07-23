@@ -75,6 +75,7 @@ switcher = {
     'Shorts': trousers,
     'Bottoms': trousers,
     'Tracksuits': tracksuits,
+    'Track Tops': tracksuits,
     'Sweatshirts': sweatshirts,
     'Longsleeves': sweatshirts,
     'Custom Sweatshirts': sweatshirts,
