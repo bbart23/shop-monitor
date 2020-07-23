@@ -1,22 +1,18 @@
 import requests
+import pickle
 import discord
 import datetime
-import pickle
 import time
-from os import path
+import re
 from discord import Webhook, RequestsWebhookAdapter
-from bs4 import BeautifulSoup
 from siteItem import SiteItem
+from os import path
 
 if path.exists('vlone_list.dat'):
     filehandler = open('vlone_list.dat', 'rb')
     ItemList = pickle.load(filehandler)
 else:
     ItemList = []
-
-VloneLinks = ['t-shirts', 'long-sleeves', 'jackets', 'hoodies', 'pants', 'jackets-1']
-client = discord.Client()
-URL = 'https://livevlonedievlone.myshopify.com/collections/'
 
 tshirtsHook = 'https://discordapp.com/api/webhooks/732716854006644739/TUusTbn5szYGrQ9Hm54ABGuKSD0Y80QdZ0Ta6yijKgeVS2F4pVXMVY1Nwfa2q8I7qgyA'
 longSleevesHook = 'https://discordapp.com/api/webhooks/732717110169567345/865ylGA6ae1ya2yOKCZI3Xm8T1kIe2MjeCHCqITXAYFomz8uOkp8dAgSFSIf8gXeBHUd'
@@ -40,7 +36,6 @@ def ExistsInList(item):
             return ind
     return -1
 
-
 def SendDiscordMessage(itemName, itemColor, price, availability, URL, imageURL, sizes, webhook):
     Desc = '**Shop:** [VLone (US)](https://livevlonedievlone.myshopify.com/)\n**Color:** ' + itemColor + '\n**Price:** ' + price + '\n**State:** ' + availability + '\n\n> QuickTask\n> [' + sizes + '](' + URL + ')';
     Color = 12726577
@@ -50,102 +45,80 @@ def SendDiscordMessage(itemName, itemColor, price, availability, URL, imageURL, 
     embed.set_footer(text=Footer)
     webhook.send(embed=embed, username='Sneaker Alphas')
 
-
-def IsElementPresent(element):
-    soldOut = element.find(class_='product-item__sold-out')
-    if soldOut is None:
-        return False
-    return True
-
-
 switcher = {
-    't-shirts': tshirts,
-    'long-sleeves': longSleeves,
-    'jackets': crewnecks,
-    'hoodies': hoodies,
-    'pants': pants,
-    'jackets-1': jackets
+    'T-Shirt': tshirts,
+    'longsleeve': longSleeves,
+    'Crewneck': crewnecks,
+    'Hoodies': hoodies,
+    'Pants': pants,
+    'Jacket': jackets
 }
 
+pageNum = 0
+
 while True:
-    for vlonelink in VloneLinks:
-        webhook = switcher.get(vlonelink)
-        page = requests.get(URL + vlonelink)
-        print(URL + vlonelink)
-        print('Looking at ' + vlonelink)
-        soup = BeautifulSoup(page.content, 'html.parser')
-        results = soup.find(class_='main-content')
+    time.sleep(2)
+    pageNum += 1
+    request = requests.get('https://livevlonedievlone.myshopify.com/collections/all/products.json?limit=250&page=' + str(pageNum))
 
-        item_elems = results.find_all(class_='product-item__link-wrapper')
-        for article in item_elems:
-            ItemTitle = article.find(class_='product-item__title').text
-            if ' (' in ItemTitle:
-                ItemName, ItemColor = ItemTitle.split(' (')
-                ItemColor = ItemColor[:-1]
-            else:
-                ItemName = ItemTitle
-                ItemColor = ''
-            print(ItemName)
-            SoldOut = IsElementPresent(article)
-            ItemLink = 'https://livevlonedievlone.myshopify.com' + article.find(class_='product-item__link').get('href')
-            ItemPicture = 'https:' + article.find('img').get('src')
-            #ItemPrice = article.find(class_='product-item__price-wrapper').text
-            #print(ItemPicture)
+    decodedJson = request.json()
 
-            temp = SiteItem(ItemName, ItemColor, SoldOut)
-            index = ExistsInList(temp)
-            if index != -1:
-                oldSoldOut = ItemList[index].SoldOut
-                oldPrice = ItemList[index].Price
-                oldSizes = ItemList[index].Sizes
+    if len(decodedJson['products']) == 0:
+        pageNum = 0
+        continue
 
-                if SoldOut != oldSoldOut:
-                    if not SoldOut:
-                        page2 = requests.get(ItemLink)
-                        print(ItemLink)
-                        soup2 = BeautifulSoup(page2.content, 'html.parser')
-                        ItemPrice = soup2.find(class_='product__price--reg js-price').text
-                        temp.Price = ItemPrice
-                        sizeString = ''
-                        if not SoldOut:
-                            sizes = soup2.find(id='ProductSelect-product-template').find_all('option')
-                            for size in sizes:
-                                if 'Sold out' not in size.text:
-                                    sizeText, price = str(size.text).split(' -')
-                                    if sizeString == '':
-                                        sizeString += sizeText
-                                    else:
-                                        sizeString += '|' + sizeText
-                        temp.Sizes = sizeString
-                        SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString,
-                                           webhook)
+    for product in decodedJson['products']:
+        webhook = switcher.get(product['product_type'])
+
+        try:
+            ItemName, ItemColor = product['title'].split(' (')
+        except ValueError:
+            ItemName = product['title']
+            ItemColor = ' '
+
+        ItemColor = ItemColor[:-1]
+        print(ItemName)
+
+        SoldOut = True
+        sizeString = ''
+        for variant in product['variants']:
+            #print(variant['available'])
+            if variant['available'] == True:
+                SoldOut = False
+                size = variant['title']
+                if size not in sizeString:
+                    if sizeString == '':
+                        sizeString += size
                     else:
-                        SendDiscordMessage(ItemName, ItemColor, oldPrice, 'Sold Out', ItemLink, ItemPicture, '',
-                                           webhook)
-                    ItemList.pop(index)
-                    ItemList.append(temp)
-            else:
-                page2 = requests.get(ItemLink)
-                soup2 = BeautifulSoup(page2.content, 'html.parser')
-                ItemPrice = soup2.find(class_='product__price--reg js-price').text
-                temp.Price = ItemPrice
-                sizeString = ''
-                if not SoldOut:
-                    sizes = soup2.find(id='ProductSelect-product-template').find_all('option')
-                    for size in sizes:
-                        if 'Sold out' not in size.text:
-                            sizeText, price = str(size.text).split(' -')
-                            if sizeString == '':
-                                sizeString += sizeText
-                            else:
-                                sizeString += '|' + sizeText
-                temp.Sizes = sizeString
-                ItemList.append(temp)
-                if not SoldOut:
-                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture,
-                                       sizeString, webhook)
+                        sizeString += '|' + size
 
+        ItemPicture = product['images'][0]['src']
+        ItemPrice = '$' + product['variants'][0]['price']
+        ItemLink = 'https://livevlonedievlone.myshopify.com/products/' + product['handle']
+        temp = SiteItem(ItemName, ItemColor, SoldOut)
+
+
+        index = ExistsInList(temp)
+
+        # If item already exists in list
+        if index != -1:
+            oldSoldOut = ItemList[index].SoldOut
+
+            if SoldOut != oldSoldOut:
+                if not SoldOut:
+                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString, webhook)
+                else:
+                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'Sold Out', ItemLink, ItemPicture, sizeString, webhook)
+                ItemList.pop(index)
+                ItemList.append(temp)
+        else:
+            if not SoldOut:
+                SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture, sizeString, webhook)
+            ItemList.append(temp)
+
+
+
+    #print(decodedJson['products'][0]['title'])
     file = open('vlone_list.dat', 'wb')
     pickle.dump(ItemList, file)
     file.close()
-    time.sleep(10)
