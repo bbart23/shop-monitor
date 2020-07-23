@@ -74,6 +74,7 @@ switcher = {
     'FOOTWEAR': footwear,
     "LADIES'": ladies,
     'KIDS': kids,
+    'MENS': goods,
     'GOODS': goods
 }
 
