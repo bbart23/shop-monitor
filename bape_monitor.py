@@ -70,6 +70,7 @@ switcher = {
     'KNIT': knit,
     'JACKETS': jacket,
     'PANTS': pants,
+    'SHOES': footwear,
     'FOOTWEAR': footwear,
     "LADIES'": ladies,
     'KIDS': kids,
