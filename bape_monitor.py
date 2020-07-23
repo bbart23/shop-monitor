@@ -50,7 +50,7 @@ def ExistsInList(item):
     ind = -1
     for Item in ItemList:
         ind += 1
-        if Item.Name == item.Name and Item.Color == item.Color:
+        if Item.Name == item.Name:
             return ind
     return -1
 
