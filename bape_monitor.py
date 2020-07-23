@@ -1,21 +1,18 @@
 import requests
+import pickle
 import discord
 import datetime
-import pickle
-from os import path
+import time
+import re
 from discord import Webhook, RequestsWebhookAdapter
-from bs4 import BeautifulSoup
 from siteItem import SiteItem
+from os import path
 
 if path.exists('bape_list.dat'):
     filehandler = open('bape_list.dat', 'rb')
     ItemList = pickle.load(filehandler)
 else:
     ItemList = []
-
-BapeLinks = ['t-shirts', 'cutandsewn', 'shirts', 'knit', 'jacket', 'pants', 'footwear', 'goods']
-client = discord.Client()
-URL = 'https://us.bape.com/collections/all/'
 
 tshirtsHook = 'https://discordapp.com/api/webhooks/730133226634608672' \
               '/kyq30fQu7dXBatftLKQk94uaeTDzmEgz2Jig0trNQxv_SAlVPIjefMbgrw9-EWEOLkrT '
@@ -33,6 +30,10 @@ footwearHook = 'https://discordapp.com/api/webhooks/730134207908675695' \
                '/ewz_1F91xXWGoul_f2WTlEdp0iIB76ObljFLaCCvohHUvkPhddIX3Apa-9s1T1_oAz6R '
 goodsHook = 'https://discordapp.com/api/webhooks/730134284735610941/nAxh8tn9QJuobsaOaC-NKFYlX_Uyns3iQF5nq5AXBRAZojqj8' \
             '-yCX80LP6Sxa-lMeLQv '
+ladiesHook = 'https://discordapp.com/api/webhooks/735653385453174887' \
+             '/Nh3cigGkVQwtViKIsaexnQ7BntrrMfY08m75GQWszCjHRbHje63lNLKNoECULwHbD9fd '
+kidsHook = 'https://discordapp.com/api/webhooks/735653499726987347' \
+           '/-shAm1Tv73af3ybU2A5IKm5LU4aVLlBJG_UdL1cyeRo5eBpWhEKtu7q89b6mqxtf1gQJ '
 
 tshirts = Webhook.from_url(tshirtsHook, adapter=RequestsWebhookAdapter())
 cutandsewn = Webhook.from_url(cutandsewnHook, adapter=RequestsWebhookAdapter())
@@ -42,15 +43,16 @@ jacket = Webhook.from_url(jacketHook, adapter=RequestsWebhookAdapter())
 pants = Webhook.from_url(pantsHook, adapter=RequestsWebhookAdapter())
 footwear = Webhook.from_url(footwearHook, adapter=RequestsWebhookAdapter())
 goods = Webhook.from_url(goodsHook, adapter=RequestsWebhookAdapter())
+ladies = Webhook.from_url(ladiesHook, adapter=RequestsWebhookAdapter())
+kids = Webhook.from_url(kidsHook, adapter=RequestsWebhookAdapter())
 
 def ExistsInList(item):
     ind = -1
     for Item in ItemList:
         ind += 1
-        if Item.Name == item.Name:
+        if Item.Name == item.Name and Item.Color == item.Color:
             return ind
     return -1
-
 
 def SendDiscordMessage(itemName, itemColor, price, availability, URL, imageURL, sizes, webhook):
     Desc = '**Shop:** [Bape (US)](https://us.bape.com/collections/all)\n**Color:** ' + itemColor + '\n**Price:** ' + price + '\n**State:** ' + availability + '\n\n> QuickTask\n> [' + sizes + '](' + URL + ')';
@@ -61,123 +63,88 @@ def SendDiscordMessage(itemName, itemColor, price, availability, URL, imageURL, 
     embed.set_footer(text=Footer)
     webhook.send(embed=embed, username='Sneaker Alphas')
 
-
-def IsElementPresent(element):
-    soldOut = element.find(class_='SoldOut')
-    if soldOut is None:
-        return False
-    return True
-
-
 switcher = {
-    't-shirts': tshirts,
-    'cutandsewn': cutandsewn,
-    'shirts': shirts,
-    'knit': knit,
-    'jacket': jacket,
-    'pants': pants,
-    'footwear': footwear,
-    'goods': goods
+    'T-SHIRTS': tshirts,
+    'CUT AND SEWN': cutandsewn,
+    'SHIRTS': shirts,
+    'KNIT': knit,
+    'JACKETS': jacket,
+    'PANTS': pants,
+    'FOOTWEAR': footwear,
+    "LADIES'": ladies,
+    'KIDS': kids,
+    'GOODS': goods
 }
 
+pageNum = 0
+
 while True:
-    for bapelink in BapeLinks:
-        pageNum = 1
-        webhook = switcher.get(bapelink)
-        page = requests.get(URL + bapelink)
-        print(URL + bapelink)
-        while(True):
-            print('Looking at ' + bapelink + ' Page ' + str(pageNum))
-            soup = BeautifulSoup(page.content, 'html.parser')
-            results = soup.find(class_='row product-row')
+    time.sleep(2)
+    pageNum += 1
+    request = requests.get('https://us.bape.com/collections/all/products.json?limit=250&page=' + str(pageNum))
 
-            item_elems = results.find_all(class_='thumb col-xs-6 col-sm-4')
-            for article in item_elems:
-                ItemName = article.find(class_='product-name').text
-                #print(ItemName)
-                #ItemColor = article.find(class_='product-style').find(class_='name-link').text
-                SoldOut = IsElementPresent(article)
-                ItemLink = 'https://us.bape.com/' + article.get('href')
-                ItemPicture = 'https:' + article.find('img').get('src')
-                ItemPrice = article.find(class_='money').get('aria-label')
-                #print(ItemPicture)
+    decodedJson = request.json()
 
-                temp = SiteItem(ItemName, '', SoldOut)
-                index = ExistsInList(temp)
-                # If the item exists in the list
-                if index != -1:
-                    oldSoldOut = ItemList[index].SoldOut
-                    oldPrice = ItemList[index].Price
-                    oldSizes = ItemList[index].Sizes
-                    oldColor = ItemList[index].Color
+    if len(decodedJson['products']) == 0:
+        pageNum = 0
+        continue
 
-                    if SoldOut != oldSoldOut:
-                        if not SoldOut:
-                            page2 = requests.get(ItemLink)
-                            soup2 = BeautifulSoup(page2.content, 'html.parser')
-                            temp.Price = ItemPrice
-                            sizeString = ''
-                            colorString = ''
-                            variants = soup2.find(id='variants').find_all('li')
-                            for variant in variants:
-                                if variant.find(class_='sold_out') is None:
-                                    label = variant.find('label').text
-                                    id, color, size = label.split(' / ')
-                                    if sizeString == '':
-                                        sizeString += size
-                                    else:
-                                        sizeString += '|' + size
-                                    if colorString == '':
-                                        colorString += color
-                                    else:
-                                        colorString += '|' + color
-                            temp.Sizes = sizeString
-                            temp.Color = colorString
-                            ItemColor = colorString
-                            SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString,
-                                               webhook)
-                        else:
-                            SendDiscordMessage(ItemName, oldColor, oldPrice, 'Sold Out', ItemLink, ItemPicture, '',
-                                               webhook)
-                        ItemList.pop(index)
-                        ItemList.append(temp)
+    for product in decodedJson['products']:
+        webhook = switcher.get(product['product_type'])
+
+        ItemName = product['title']
+        print(ItemName)
+        SoldOut = True
+        sizeString = ''
+        colorString = ''
+        for variant in product['variants']:
+            #print(variant['available'])
+            if variant['available'] == True:
+                SoldOut = False
+                color = variant['option2']
+                size = variant['option3']
+                if color not in colorString:
+                    if colorString == '':
+                        colorString += color
+                    else:
+                        colorString += '|' + color
+                if size not in sizeString:
+                    if sizeString == '':
+                        sizeString += size
+                    else:
+                        sizeString += '|' + size
+
+        ItemColor = colorString
+        if product['variants'][0]['featured_image'] is not None:
+            ItemPicture = product['variants'][0]['featured_image']['src']
+        else:
+            ItemPicture = product['images'][0]['src']
+        ItemPrice = '$' + product['variants'][0]['price']
+        ItemLink = 'https://us.bape.com/collections/all/products/' + product['handle']
+        temp = SiteItem(ItemName, ItemColor, SoldOut)
+
+
+        index = ExistsInList(temp)
+
+        # If item already exists in list
+        if index != -1:
+            oldSoldOut = ItemList[index].SoldOut
+
+            if SoldOut != oldSoldOut:
+                if not SoldOut:
+                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString, webhook)
                 else:
-                    page2 = requests.get(ItemLink)
-                    soup2 = BeautifulSoup(page2.content, 'html.parser')
-                    temp.Price = ItemPrice
-                    sizeString = ''
-                    colorString = ''
-                    if not SoldOut:
-                        variants = soup2.find(id='variants').find_all('li')
-                        for variant in variants:
-                            if variant.find(class_='sold_out') is None:
-                                label = variant.find('label').text
-                                id, color, size = label.split(' / ')
-                                if size not in sizeString:
-                                    if sizeString == '':
-                                        sizeString += size
-                                    else:
-                                        sizeString += '|' + size
-                                if color not in colorString:
-                                    if colorString == '':
-                                        colorString += color
-                                    else:
-                                        colorString += '|' + color
-                    temp.Sizes = sizeString
-                    temp.Color = colorString
-                    ItemColor = colorString
-                    ItemList.append(temp)
-                    if not SoldOut:
-                        SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture,
-                                           sizeString, webhook)
-            nextLinkDisabled = soup.find(class_='next disabled')
-            nextLinkEnabled = soup.find(class_='next')
-            if nextLinkDisabled is None and nextLinkEnabled is not None:
-                nextLink = soup.find(class_='next').find('a').get('href')
-                page = requests.get('https://us.bape.com' + nextLink)
-                pageNum += 1
-            else:
-                break
+                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'Sold Out', ItemLink, ItemPicture, sizeString, webhook)
+                ItemList.pop(index)
+                ItemList.append(temp)
+        else:
+            if not SoldOut:
+                SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture, sizeString, webhook)
+            ItemList.append(temp)
+
+
+
+    #print(decodedJson['products'][0]['title'])
     file = open('bape_list.dat', 'wb')
     pickle.dump(ItemList, file)
     file.close()
