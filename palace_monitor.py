@@ -1,23 +1,18 @@
 import requests
+import pickle
 import discord
 import datetime
-import pickle
 import time
-from os import path
+import re
 from discord import Webhook, RequestsWebhookAdapter
-from bs4 import BeautifulSoup
 from siteItem import SiteItem
+from os import path
 
 if path.exists('palace_list.dat'):
     filehandler = open('palace_list.dat', 'rb')
     ItemList = pickle.load(filehandler)
 else:
     ItemList = []
-
-PalaceLinks = ['jackets', 'shirting', 'trousers', 'tracksuits', 'sweatshirts', 'tops', 't-shirts',
-               'footwear', 'hats', 'accessories', 'hardware']
-client = discord.Client()
-URL = 'https://shop-usa.palaceskateboards.com/collections/'
 
 jacketsHook = 'https://discordapp.com/api/webhooks/727938045571104890/SEXTWOh8oFHOmGYa-qmWpnLJZdGs9p8WhDHfqlOv' \
               '-ThHxmHg77ecttVCgIT-LXEBLkeN '
@@ -54,8 +49,6 @@ hats = Webhook.from_url(hatsHook, adapter=RequestsWebhookAdapter())
 accessories = Webhook.from_url(accessoriesHook, adapter=RequestsWebhookAdapter())
 hardware = Webhook.from_url(hardwareHook, adapter=RequestsWebhookAdapter())
 
-
-
 def ExistsInList(item):
     ind = -1
     for Item in ItemList:
@@ -63,7 +56,6 @@ def ExistsInList(item):
         if Item.Name == item.Name:
             return ind
     return -1
-
 
 def SendDiscordMessage(itemName, price, availability, URL, imageURL, sizes, webhook):
     Desc = '**Shop:** [Palace (US)](https://shop-usa.palaceskateboards.com/)\n**Price:** ' + price + '\n**State:** ' + availability + '\n\n> QuickTask\n> [' + sizes + '](' + URL + ')';
@@ -75,92 +67,93 @@ def SendDiscordMessage(itemName, price, availability, URL, imageURL, sizes, webh
     webhook.send(embed=embed, username='Sneaker Alphas')
 
 
-def IsElementPresent(element):
-    soldOut = element.find(class_='price').text
-    if 'SOLD' in soldOut:
-        return True
-    return False
-
-
 switcher = {
-    'jackets': jackets,
-    'shirting': shirting,
-    'trousers': trousers,
-    'tracksuits': tracksuits,
-    'sweatshirts': sweatshirts,
-    'tops': tops,
-    't-shirts': tshirts,
-    'footwear': footwear,
-    'hats': hats,
-    'accessories': accessories,
-    'hardware': hardware
+    'Jackets': jackets,
+    'Shirting': shirting,
+    'Trousers': trousers,
+    'Track Bottoms': trousers,
+    'Shorts': trousers,
+    'Bottoms': trousers,
+    'Tracksuits': tracksuits,
+    'Sweatshirts': sweatshirts,
+    'Longsleeves': sweatshirts,
+    'Custom Sweatshirts': sweatshirts,
+    'Tops': tops,
+    'Knitwear': tops,
+    'T-Shirts': tshirts,
+    'Custom Jersey': tshirts,
+    'Footwear': footwear,
+    'Hats': hats,
+    'Accessories': accessories,
+    'Luggage': accessories,
+    'Socks': accessories,
+    'Skateboard Hardware': hardware,
+    'Hardware': hardware
 }
 
+pageNum = 0
+
 while True:
-    for palacelink in PalaceLinks:
-        print('Looking at ' + palacelink)
-        webhook = switcher.get(palacelink)
-        page = requests.get(URL + palacelink)
-        soup = BeautifulSoup(page.content, 'html.parser')
-        results = soup.find(id='product-loop')
+    time.sleep(2)
+    pageNum += 1
+    request = requests.get('https://shop-usa.palaceskateboards.com/products.json?limit=250&page=' + str(pageNum))
 
-        item_elems = results.find_all(class_='product-grid-item clearfix')
-        for article in item_elems:
-            ItemName = article.find(class_='product-info').find(class_='title').text
-            #print(ItemName)
-            #ItemColor = article.find(class_='product-style').find(class_='name-link').text
-            SoldOut = IsElementPresent(article)
-            ItemLink = 'https://shop-usa.palaceskateboards.com/' + article.find('a').get('href')
-            ItemPicture = 'https:' + article.find('img').get('src')
-            #print(ItemPicture)
+    decodedJson = request.json()
 
-            temp = SiteItem(ItemName, '', SoldOut)
-            index = ExistsInList(temp)
-            if index != -1:
-                oldSoldOut = ItemList[index].SoldOut
-                oldPrice = ItemList[index].Price
-                oldSizes = ItemList[index].Sizes
+    if len(decodedJson['products']) == 0:
+        pageNum = 0
+        continue
 
-                if SoldOut != oldSoldOut:
-                    if not SoldOut:
-                        page2 = requests.get(ItemLink)
-                        soup2 = BeautifulSoup(page2.content, 'html.parser')
-                        ItemPrice = soup2.find('span', class_='prod-price').text
-                        temp.Price = ItemPrice
-                        sizeString = ""
-                        sizes = soup2.find(id='product-select').find_all('option')
-                        for size in sizes:
-                            if sizeString == "":
-                                sizeString += size.text
-                            else:
-                                sizeString += '|' + size.text
-                        temp.Sizes = sizeString
-                        SendDiscordMessage(ItemName, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString,
-                                           webhook)
+    for product in decodedJson['products']:
+        webhook = switcher.get(product['product_type'])
+
+        ItemName = product['title']
+
+        print(ItemName)
+
+        SoldOut = True
+        sizeString = ''
+        for variant in product['variants']:
+            #print(variant['available'])
+            if variant['available'] == True:
+                SoldOut = False
+                size = variant['title']
+                if size not in sizeString:
+                    if sizeString == '':
+                        sizeString += size
                     else:
-                        SendDiscordMessage(ItemName, oldPrice, 'Sold Out', ItemLink, ItemPicture, '',
-                                           webhook)
-                    ItemList.pop(index)
-                    ItemList.append(temp)
-            else:
+                        sizeString += '|' + size
+        try:
+            ItemPicture = product['images'][0]['src']
+        except IndexError:
+            ItemPicture = ''
+
+        ItemPrice = '$' + product['variants'][0]['price']
+        ItemLink = 'https://shop-usa.palaceskateboards.com/products/' + product['handle']
+        temp = SiteItem(ItemName, '', SoldOut)
+
+
+        index = ExistsInList(temp)
+
+        # If item already exists in list
+        if index != -1:
+            oldSoldOut = ItemList[index].SoldOut
+
+            if SoldOut != oldSoldOut:
                 if not SoldOut:
-                    page2 = requests.get(ItemLink)
-                    soup2 = BeautifulSoup(page2.content, 'html.parser')
-                    ItemPrice = soup2.find('span', class_='prod-price').text
-                    temp.Price = ItemPrice
-                    sizeString = ""
-                    sizes = soup2.find(id='product-select').find_all('option')
-                    for size in sizes:
-                        if sizeString == "":
-                            sizeString += size.text
-                        else:
-                            sizeString += '|' + size.text
-                    temp.Sizes = sizeString
-                    if not SoldOut:
-                        SendDiscordMessage(ItemName, ItemPrice, 'In Stock', ItemLink, ItemPicture, sizeString,
-                                           webhook)
+                    SendDiscordMessage(ItemName, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString, webhook)
+                else:
+                    SendDiscordMessage(ItemName, ItemPrice, 'Sold Out', ItemLink, ItemPicture, sizeString, webhook)
+                ItemList.pop(index)
                 ItemList.append(temp)
+        else:
+            if not SoldOut:
+                SendDiscordMessage(ItemName, ItemPrice, 'In Stock', ItemLink, ItemPicture, sizeString, webhook)
+            ItemList.append(temp)
+
+
+
+    #print(decodedJson['products'][0]['title'])
     file = open('palace_list.dat', 'wb')
     pickle.dump(ItemList, file)
     file.close()
-    time.sleep(5)
