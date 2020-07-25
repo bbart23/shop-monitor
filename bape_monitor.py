@@ -50,7 +50,7 @@ def ExistsInList(item):
     ind = -1
     for Item in ItemList:
         ind += 1
-        if Item.Name == item.Name:
+        if Item.Name == item.Name and Item.Color == item.Color:
             return ind
     return -1
 
@@ -64,19 +64,18 @@ def SendDiscordMessage(itemName, itemColor, price, availability, URL, imageURL, 
     webhook.send(embed=embed, username='Sneaker Alphas')
 
 switcher = {
-    'T-SHIRTS': tshirts,
-    'CUT AND SEWN': cutandsewn,
-    'SHIRTS': shirts,
-    'KNIT': knit,
-    'JACKETS': jacket,
-    'PANTS': pants,
-    'SHOES': footwear,
-    'FOOTWEAR': footwear,
-    'Footwear': footwear,
-    "LADIES'": ladies,
-    'KIDS': kids,
-    'MENS': goods,
-    'GOODS': goods
+    't-shirts': tshirts,
+    'cut and sewn': cutandsewn,
+    'shirts': shirts,
+    'knit': knit,
+    'jackets': jacket,
+    'pants': pants,
+    'shoes': footwear,
+    'footwear': footwear,
+    "ladies'": ladies,
+    'kids': kids,
+    'mens': goods,
+    'goods': goods
 }
 
 pageNum = 0
@@ -93,10 +92,9 @@ while True:
         continue
 
     for product in decodedJson['products']:
-        webhook = switcher.get(product['product_type'])
+        webhook = switcher.get(product['product_type'].lower())
 
         ItemName = product['title']
-        print(ItemName)
         SoldOut = True
         sizeString = ''
         colorString = ''
@@ -135,14 +133,26 @@ while True:
 
             if SoldOut != oldSoldOut:
                 if not SoldOut:
-                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString, webhook)
+                    try:
+                        SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString, webhook)
+                        print('[RESTOCK]' + ItemName)
+                    except:
+                        print('ERROR: Couldn\'t send message. Product Type: '+ product['product_type'].lower())
                 else:
-                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'Sold Out', ItemLink, ItemPicture, sizeString, webhook)
+                    try:
+                        SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'Sold Out', ItemLink, ItemPicture, sizeString, webhook)
+                        print('[SOLD OUT]' + ItemName)
+                    except:
+                        print('ERROR: Couldn\'t send message. Product Type: '+ product['product_type'].lower())
                 ItemList.pop(index)
                 ItemList.append(temp)
         else:
             if not SoldOut:
-                SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture, sizeString, webhook)
+                try:
+                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture, sizeString, webhook)
+                    print('[IN STOCK]' + ItemName)
+                except:
+                    print('ERROR: Couldn\'t send message. Product Type: ' + product['product_type'].lower())
             ItemList.append(temp)
 
 
