@@ -8,27 +8,26 @@ from discord import Webhook, RequestsWebhookAdapter
 from siteItem import SiteItem
 from os import path
 
-if path.exists('antisocial_list.dat'):
-    filehandler = open('antisocial_list.dat', 'rb')
+if path.exists('amamaniere_list.dat'):
+    filehandler = open('amamaniere_list.dat', 'rb')
     ItemList = pickle.load(filehandler)
 else:
     ItemList = []
 
-antiSocialHook = 'https://discordapp.com/api/webhooks/737764108216041592/tJFSnD-eEE14WvMMJU4l2vOmfPBSlKXv2C0-xoT-vTwqu4JDrc8eY0ezQq2jwmuN3YXI'
+maniereHook = 'https://discordapp.com/api/webhooks/738121189905531081/w9-I5CM8-MLLd-TZVhMC2osILd0zNq7lMSKZ8vWGdCeTRKag0IFsUNSV5Nz9YjDCbHxz'
 
-
-antiSocial = Webhook.from_url(antiSocialHook, adapter=RequestsWebhookAdapter())
+maniere = Webhook.from_url(maniereHook, adapter=RequestsWebhookAdapter())
 
 def ExistsInList(item):
     ind = -1
     for Item in ItemList:
         ind += 1
-        if Item.Name == item.Name:
+        if Item.Name == item.Name and Item.Color == item.Color:
             return ind
     return -1
 
 def SendDiscordMessage(itemName, itemColor, price, availability, URL, imageURL, sizes, webhook):
-    Desc = '**Shop:** [Anti Social Social Club (US)](https://www.antisocialsocialclub.com/)\n**Price:** ' + price + '\n**State:** ' + availability + '\n\n> QuickTask\n> [' + sizes + '](' + URL + ')';
+    Desc = '**Shop:** [A Ma Maniere (US)](https://www.a-ma-maniere.com/collections/sneakers/)\n**Color:** ' + itemColor + '\n**Price:** ' + price + '\n**State:** ' + availability + '\n\n> QuickTask\n> [' + sizes + '](' + URL + ')';
     Color = 12726577
     Footer = '[SneakerAlpha]'
     embed = discord.Embed(title=itemName, description=Desc, url=URL, color=Color, timestamp=datetime.datetime.now())
@@ -41,7 +40,7 @@ pageNum = 0
 while True:
     time.sleep(10)
     pageNum += 1
-    request = requests.get('https://www.antisocialsocialclub.com/products.json?limit=250&page=' + str(pageNum))
+    request = requests.get('https://www.a-ma-maniere.com/collections/sneakers/products.json?limit=250&page=' + str(pageNum))
 
     decodedJson = request.json()
 
@@ -50,24 +49,25 @@ while True:
         continue
 
     for product in decodedJson['products']:
-        webhook = antiSocial
+        webhook = maniere
 
-        ItemName = product['title']
+        ItemName, ItemColor = product['title'].split('[')
+        ItemColor = ItemColor[:-1]
         SoldOut = True
         sizeString = ''
-        colorString = ''
         for variant in product['variants']:
             #print(variant['available'])
             if variant['available'] == True:
                 SoldOut = False
-                size = variant['option1']
+                size = variant['option2']
+                if size is None:
+                    size = variant['option1']
                 if size not in sizeString:
                     if sizeString == '':
                         sizeString += size
                     else:
                         sizeString += '|' + size
 
-        ItemColor = colorString
         if product['variants'][0]['featured_image'] is not None:
             ItemPicture = product['variants'][0]['featured_image']['src']
         else:
@@ -76,7 +76,7 @@ while True:
             except IndexError:
                 ItemPicture = ''
         ItemPrice = '$' + product['variants'][0]['price']
-        ItemLink = 'https://www.antisocialsocialclub.com/products/' + product['handle']
+        ItemLink = 'https://www.a-ma-maniere.com/products/' + product['handle']
         temp = SiteItem(ItemName, ItemColor, SoldOut)
 
 
@@ -113,6 +113,6 @@ while True:
 
 
     #print(decodedJson['products'][0]['title'])
-    file = open('antisocial_list.dat', 'wb')
+    file = open('amamaniere_list.dat', 'wb')
     pickle.dump(ItemList, file)
     file.close()
