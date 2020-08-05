@@ -71,7 +71,7 @@ while True:
             #print(variant['available'])
             if variant['available'] == True:
                 SoldOut = False
-                size = variant['option1']
+                size = variant['option2']
                 if size is None:
                     size = 'F'
                 if size not in sizeString:
