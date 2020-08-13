@@ -209,45 +209,108 @@ westnycHook = 'https://discordapp.com/api/webhooks/739919591328841798/s4ynbBbgY_
 westnyc = Webhook.from_url(westnycHook, adapter=RequestsWebhookAdapter())
 
 while True:
-    ScanStore('amamaniere_list.dat', 'https://www.a-ma-maniere.com/collections/sneakers/', maniere, 'option2',
-              'https://www.a-ma-maniere.com/products/', 'A Ma Maniere (US)')
-    ScanStore('antisocial_list.dat', 'https://www.antisocialsocialclub.com/', antiSocial, 'option1',
-              'https://www.antisocialsocialclub.com/products/', 'Anti Social Social Club (US)')
-    ScanStore('chinatown_list.dat', 'https://thechinatownmarket.com/', chinatown, 'option2',
-              'https://thechinatownmarket.com/products/', 'Chinatown Market (US)')
-    ScanStore('darkside_list.dat', 'https://www.thedarksideinitiative.com/collections/footwear/', darkside, 'option1',
-              'https://www.thedarksideinitiative.com/collections/footwear/products/', 'The Darkside Initiative (US)')
-    ScanStore('dopefactory_list.dat', 'https://www.dope-factory.com/collections/sneakers/', dopefactory, 'option1',
-              'https://www.dope-factory.com/products/', 'Dope Factory (US)')
-    ScanStore('extrabutter_list.dat', 'https://extrabutterny.com/collections/footwear/', extrabutter, 'option1',
-              'https://extrabutterny.com/collections/footwear/products/', 'Extra Butter (US)')
-    ScanStore('limitededt_list.dat', 'https://limitededt.com/collections/mens/', limitededt, 'option1',
-              'https://limitededt.com/collections/mens/products/', 'Limited Edt (US)')
-    ScanStore('nrml_list.dat', 'https://nrml.ca/collections/mens-footwear/', nrml, 'option1',
-              'https://nrml.ca/collections/mens-footwear/products/', 'NRML (CA)')
-    ScanStore('ricchezza_list.dat', 'https://ricchezzaforever.com/collections/all/', ricchezza, 'option1',
-              'https://ricchezzaforever.com/collections/all/products/', 'Ricchezza (US)')
-    ScanStore('rockcity_list.dat', 'https://rockcitykicks.com/collections/sn/', rockcity, 'option1',
-              'https://rockcitykicks.com/collections/sn/products/', 'Rock City Kicks (US)')
-    ScanStore('rsvpgallery_list.dat', 'https://rsvpgallery.com/collections/footwear/', rsvp, 'option1',
-              'https://rsvpgallery.com/collections/footwear/products/', 'RSVP Gallery (US)')
-    ScanStore('saintalfred_list.dat', 'https://www.saintalfred.com/collections/footwear/', saintalfred, 'option1',
-              'https://www.saintalfred.com/collections/footwear/products/', 'Saint Alfred (US)')
-    ScanStore('shoegallery_list.dat', 'https://shoegallerymiami.com/', shoegallery, 'option1',
-              'https://shoegallerymiami.com/products/', 'Shoe Gallery Miami (US)')
-    ScanStore('sneakerpolitics_list.dat', 'https://sneakerpolitics.com/', sneakerpolitics, 'option1',
-              'https://sneakerpolitics.com/products/', 'Sneaker Politics (US)')
-    ScanStore('socialstatus_list.dat', 'https://www.socialstatuspgh.com/collections/sneakers/', socialstatus, 'option2',
-              'https://www.socialstatuspgh.com/collections/sneakers/products/', 'Social Status (US)')
-    ScanStore('soleclassics_list.dat', 'https://soleclassics.com/collections/shoes/', soleclassics, 'option1',
-              'https://soleclassics.com/collections/shoes/products/', 'Sole Classics (US)')
-    ScanStore('thecloset_list.dat', 'https://www.theclosetinc.com/collections/mens-footwear/', closet, 'option1',
-              'https://www.theclosetinc.com/collections/mens-footwear/products/', 'The Closet Inc (CA)')
-    ScanStore('travisscott_list.dat', 'https://shop.travisscott.com/', travisscott, 'option2',
-              'https://shop.travisscott.com/products/', 'Travis Scott (US)')
-    ScanStore('undefeated_list.dat', 'https://undefeated.com/collections/mens-footwear/', undefeated, 'option2',
-              'https://undefeated.com/collections/mens-footwear/products/', 'Undefeated Footwear (US)')
-    ScanStore('unknwn_list.dat', 'https://www.unknwn.com/collections/footwear/', unknwn, 'option2',
-              'https://www.unknwn.com/collections/footwear/products/', 'UNKNWN Footwear (US)')
-    ScanStore('westnyc_list.dat', 'https://www.westnyc.com/collections/footwear/', westnyc, 'option1',
-              'https://www.westnyc.com/collections/footwear/products/', 'West NYC (US)')
+    try:
+        ScanStore('amamaniere_list.dat', 'https://www.a-ma-maniere.com/collections/sneakers/', maniere, 'option2',
+                'https://www.a-ma-maniere.com/products/', 'A Ma Maniere (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('antisocial_list.dat', 'https://www.antisocialsocialclub.com/', antiSocial, 'option1',
+                  'https://www.antisocialsocialclub.com/products/', 'Anti Social Social Club (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('chinatown_list.dat', 'https://thechinatownmarket.com/', chinatown, 'option2',
+                  'https://thechinatownmarket.com/products/', 'Chinatown Market (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('darkside_list.dat', 'https://www.thedarksideinitiative.com/collections/footwear/', darkside, 'option1',
+                  'https://www.thedarksideinitiative.com/collections/footwear/products/', 'The Darkside Initiative (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('dopefactory_list.dat', 'https://www.dope-factory.com/collections/sneakers/', dopefactory, 'option1',
+                  'https://www.dope-factory.com/products/', 'Dope Factory (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('extrabutter_list.dat', 'https://extrabutterny.com/collections/footwear/', extrabutter, 'option1',
+                  'https://extrabutterny.com/collections/footwear/products/', 'Extra Butter (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('limitededt_list.dat', 'https://limitededt.com/collections/mens/', limitededt, 'option1',
+                  'https://limitededt.com/collections/mens/products/', 'Limited Edt (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('nrml_list.dat', 'https://nrml.ca/collections/mens-footwear/', nrml, 'option1',
+                  'https://nrml.ca/collections/mens-footwear/products/', 'NRML (CA)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('ricchezza_list.dat', 'https://ricchezzaforever.com/collections/all/', ricchezza, 'option1',
+                  'https://ricchezzaforever.com/collections/all/products/', 'Ricchezza (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('rockcity_list.dat', 'https://rockcitykicks.com/collections/sn/', rockcity, 'option1',
+                  'https://rockcitykicks.com/collections/sn/products/', 'Rock City Kicks (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('rsvpgallery_list.dat', 'https://rsvpgallery.com/collections/footwear/', rsvp, 'option1',
+                  'https://rsvpgallery.com/collections/footwear/products/', 'RSVP Gallery (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('saintalfred_list.dat', 'https://www.saintalfred.com/collections/footwear/', saintalfred, 'option1',
+                  'https://www.saintalfred.com/collections/footwear/products/', 'Saint Alfred (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('shoegallery_list.dat', 'https://shoegallerymiami.com/', shoegallery, 'option1',
+                  'https://shoegallerymiami.com/products/', 'Shoe Gallery Miami (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('sneakerpolitics_list.dat', 'https://sneakerpolitics.com/', sneakerpolitics, 'option1',
+                  'https://sneakerpolitics.com/products/', 'Sneaker Politics (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('socialstatus_list.dat', 'https://www.socialstatuspgh.com/collections/sneakers/', socialstatus, 'option2',
+                  'https://www.socialstatuspgh.com/collections/sneakers/products/', 'Social Status (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('soleclassics_list.dat', 'https://soleclassics.com/collections/shoes/', soleclassics, 'option1',
+                  'https://soleclassics.com/collections/shoes/products/', 'Sole Classics (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('thecloset_list.dat', 'https://www.theclosetinc.com/collections/mens-footwear/', closet, 'option1',
+                  'https://www.theclosetinc.com/collections/mens-footwear/products/', 'The Closet Inc (CA)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('travisscott_list.dat', 'https://shop.travisscott.com/', travisscott, 'option2',
+                  'https://shop.travisscott.com/products/', 'Travis Scott (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('undefeated_list.dat', 'https://undefeated.com/collections/mens-footwear/', undefeated, 'option2',
+                  'https://undefeated.com/collections/mens-footwear/products/', 'Undefeated Footwear (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('unknwn_list.dat', 'https://www.unknwn.com/collections/footwear/', unknwn, 'option2',
+                  'https://www.unknwn.com/collections/footwear/products/', 'UNKNWN Footwear (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('westnyc_list.dat', 'https://www.westnyc.com/collections/footwear/', westnyc, 'option1',
+                  'https://www.westnyc.com/collections/footwear/products/', 'West NYC (US)')
+    except Exception as e:
+        print('Failed: ' + e)
