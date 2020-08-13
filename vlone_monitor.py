@@ -57,7 +57,7 @@ switcher = {
 pageNum = 0
 
 while True:
-    time.sleep(2)
+    time.sleep(10)
     pageNum += 1
     request = requests.get('https://livevlonedievlone.myshopify.com/collections/all/products.json?limit=250&page=' + str(pageNum))
 

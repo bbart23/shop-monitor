@@ -56,7 +56,7 @@ def ScanStore(filename, collectionLink, webhook, sizeOption, productLink, storeN
     global pageNum
     print('Scanning Store: ' + storeName)
     while True:
-        #time.sleep(10)
+        time.sleep(2)
         pageNum += 1
 
         FileCheck(filename)

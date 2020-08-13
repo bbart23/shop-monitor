@@ -76,7 +76,7 @@ switcher = {
 }
 
 while True:
-    time.sleep(2)
+    time.sleep(10)
     request = requests.get('https://kith.com/collections/kith-monday-program/products.json?limit=250&page=1#')
 
     decodedJson = request.json()
