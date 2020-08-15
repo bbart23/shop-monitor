@@ -62,8 +62,11 @@ def ScanStore(filename, collectionLink, webhook, sizeOption, productLink, storeN
         FileCheck(filename)
 
         request = requests.get(collectionLink + 'products.json?limit=250&page=' + str(pageNum))
-
-        decodedJson = request.json()
+        try:
+            decodedJson = request.json()
+        except Exception:
+            print('[ERROR] Unable to parse JSON!!')
+            return
 
         if len(decodedJson['products']) == 0:
             pageNum = 0
