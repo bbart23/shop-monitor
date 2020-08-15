@@ -75,17 +75,27 @@ switcher = {
     'Onesies': onesies
 }
 
+pageNum = 0
+collectionLink = 'https://kith.com/'
+
 while True:
     time.sleep(10)
-    request = requests.get('https://kith.com/collections/kith-monday-program/products.json?limit=250&page=1#')
+
+    pageNum += 1
+
+    request = requests.get(collectionLink + 'products.json?limit=250&page=' + str(pageNum))
 
     decodedJson = request.json()
+
+    if len(decodedJson['products']) == 0:
+        pageNum = 0
+        continue
 
     for product in decodedJson['products']:
         webhook = switcher.get(product['product_type'])
 
         ItemName, ItemColor = product['title'].split(' - ')
-        print(ItemName)
+        #print(ItemName)
         SoldOut = True
         sizeString = ''
         for variant in product['variants']:
@@ -99,7 +109,7 @@ while True:
 
         ItemPicture = product['images'][0]['src']
         ItemPrice = '$' + product['variants'][0]['price']
-        ItemLink = 'https://kith.com/collections/kith-monday-program/products/' + product['handle']
+        ItemLink = 'https://kith.com/products/' + product['handle']
         temp = SiteItem(ItemName, ItemColor, SoldOut)
 
 
@@ -111,14 +121,29 @@ while True:
 
             if SoldOut != oldSoldOut:
                 if not SoldOut:
-                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString, webhook)
+                    try:
+                        SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture, sizeString,
+                                           webhook)
+                        print('[RESTOCK]' + ItemName)
+                    except:
+                        print('ERROR: Couldn\'t send message. Product Type: ' + product['product_type'].lower())
                 else:
-                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'Sold Out', ItemLink, ItemPicture, sizeString, webhook)
+                    try:
+                        SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'Sold Out', ItemLink, ItemPicture,
+                                           sizeString, webhook)
+                        print('[SOLD OUT]' + ItemName)
+                    except:
+                        print('ERROR: Couldn\'t send message. Product Type: ' + product['product_type'].lower())
                 ItemList.pop(index)
                 ItemList.append(temp)
         else:
             if not SoldOut:
-                SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture, sizeString, webhook)
+                try:
+                    SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture, sizeString,
+                                       webhook)
+                    print('[IN STOCK]' + ItemName)
+                except:
+                    print('ERROR: Couldn\'t send message. Product Type: ' + product['product_type'].lower())
             ItemList.append(temp)
 
 
