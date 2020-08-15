@@ -61,19 +61,30 @@ def SendDiscordMessage(itemName, itemColor, price, availability, URL, imageURL, 
 
 switcher = {
     'tees': tees,
+    'tops': tees,
+    'dresses': tees,
+    'tank tops': tees,
     'crewnecks': crewnecks,
     'headwear': headwear,
     'hoodies': hoodies,
     'outerwear': outerwear,
     'pants': pants,
+    'bottoms': pants,
     'shorts': shorts,
+    'swim': shorts,
     'sneakers': sneakers,
+    'sneaker': sneakers,
+    'boots': sneakers,
     'sandals': sneakers,
     'socks': socks,
     'lifestyle': lifestyle,
     'accessories': accessories,
+    'jewelry': accessories,
+    'bags': accessories,
     'button ups': buttonups,
-    'onesies': onesies
+    'onesies': onesies,
+    'one piece': onesies,
+    'bodysuit': onesies
 }
 
 pageNum = 0
