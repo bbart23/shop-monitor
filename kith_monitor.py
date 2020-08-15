@@ -60,19 +60,20 @@ def SendDiscordMessage(itemName, itemColor, price, availability, URL, imageURL, 
     webhook.send(embed=embed, username='Sneaker Alphas')
 
 switcher = {
-    'Tees': tees,
-    'Crewnecks': crewnecks,
-    'Headwear': headwear,
-    'Hoodies': hoodies,
-    'Outerwear': outerwear,
-    'Pants': pants,
-    'Shorts': shorts,
-    'Sneakers': sneakers,
-    'Socks': socks,
-    'Lifestyle': lifestyle,
-    'Accessories': accessories,
-    'Button Ups': buttonups,
-    'Onesies': onesies
+    'tees': tees,
+    'crewnecks': crewnecks,
+    'headwear': headwear,
+    'hoodies': hoodies,
+    'outerwear': outerwear,
+    'pants': pants,
+    'shorts': shorts,
+    'sneakers': sneakers,
+    'sandals': sneakers,
+    'socks': socks,
+    'lifestyle': lifestyle,
+    'accessories': accessories,
+    'button ups': buttonups,
+    'onesies': onesies
 }
 
 pageNum = 0
@@ -92,9 +93,10 @@ while True:
         continue
 
     for product in decodedJson['products']:
-        webhook = switcher.get(product['product_type'])
+        webhook = switcher.get(product['product_type'].lower())
 
-        ItemName, ItemColor = product['title'].split(' - ')
+        ItemName = product['title']
+        ItemColor = product['handle']
         #print(ItemName)
         SoldOut = True
         sizeString = ''
