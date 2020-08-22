@@ -320,7 +320,7 @@ while True:
     except Exception as e:
         print('Failed: ' + e)
     try:
-        ScanStore('nicekicks_list.dat', 'https://shopnicekicks.com/collections/mens-kicks', nicekicks, 'option1',
+        ScanStore('nicekicks_list.dat', 'https://shopnicekicks.com/collections/mens-kicks/', nicekicks, 'option1',
                   'https://shopnicekicks.com/collections/mens-kicks/products/', 'Nice Kicks (US)')
     except Exception as e:
         print('Failed: ' + e)
