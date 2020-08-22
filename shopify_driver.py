@@ -126,7 +126,7 @@ def ScanStore(filename, collectionLink, webhook, sizeOption, productLink, storeN
                             if 'yeezy' in ItemName.lower():
                                 SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture,
                                                    sizeString, yeezy, storeName, collectionLink)
-                            if 'nike' in ItemName.lower() and 'sb' in ItemName.lower():
+                            if 'nike' in ItemName.lower() and ('sb' in ItemName.lower() or 'dunk' in ItemName.lower()):
                                 SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture,
                                                    sizeString, nikesb, storeName, collectionLink)
                         except:
@@ -141,7 +141,7 @@ def ScanStore(filename, collectionLink, webhook, sizeOption, productLink, storeN
                             if 'yeezy' in ItemName.lower():
                                 SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'Sold Out', ItemLink, ItemPicture,
                                                    sizeString, yeezy, storeName, collectionLink)
-                            if 'nike' in ItemName.lower() and 'sb' in ItemName.lower():
+                            if 'nike' in ItemName.lower() and ('sb' in ItemName.lower() or 'dunk' in ItemName.lower()):
                                 SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'Sold Out', ItemLink, ItemPicture,
                                                    sizeString, nikesb, storeName, collectionLink)
                         except:
@@ -159,7 +159,7 @@ def ScanStore(filename, collectionLink, webhook, sizeOption, productLink, storeN
                         if 'yeezy' in ItemName.lower():
                             SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture,
                                                sizeString, yeezy, storeName, collectionLink)
-                        if 'nike' in ItemName.lower() and 'sb' in ItemName.lower():
+                        if 'nike' in ItemName.lower() and ('sb' in ItemName.lower() or 'dunk' in ItemName.lower()):
                             SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture,
                                                sizeString, nikesb, storeName, collectionLink)
                     except:
