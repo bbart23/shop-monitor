@@ -210,6 +210,8 @@ unknwnHook = 'https://discordapp.com/api/webhooks/739897838485504062/gl8nmURdIqG
 unknwn = Webhook.from_url(unknwnHook, adapter=RequestsWebhookAdapter())
 westnycHook = 'https://discordapp.com/api/webhooks/739919591328841798/s4ynbBbgY_N2rGXffv__V5GVJ7M0DDd9HkzrdP2nI200d9q0NycAd2CT3B9v9PAbNV7y'
 westnyc = Webhook.from_url(westnycHook, adapter=RequestsWebhookAdapter())
+nicekicksHook = 'https://discordapp.com/api/webhooks/746775193065619488/ACBqChtw6fbtPQMg0hcZZAo8wd8W-2vlDlyAD2QLnWPrk1l66tH-t0rdv6xfIho1sYJJ'
+nicekicks = Webhook.from_url(nicekicksHook, adapter=RequestsWebhookAdapter())
 
 while True:
     try:
@@ -315,5 +317,10 @@ while True:
     try:
         ScanStore('westnyc_list.dat', 'https://www.westnyc.com/collections/footwear/', westnyc, 'option1',
                   'https://www.westnyc.com/collections/footwear/products/', 'West NYC (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('nicekicks_list.dat', 'https://shopnicekicks.com/collections/mens-kicks', nicekicks, 'option1',
+                  'https://shopnicekicks.com/collections/mens-kicks/products/', 'Nice Kicks (US)')
     except Exception as e:
         print('Failed: ' + e)
