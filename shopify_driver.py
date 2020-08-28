@@ -214,6 +214,8 @@ nicekicksHook = 'https://discordapp.com/api/webhooks/746775193065619488/ACBqChtw
 nicekicks = Webhook.from_url(nicekicksHook, adapter=RequestsWebhookAdapter())
 unionlosangelesHook = 'https://discordapp.com/api/webhooks/748980041962225674/4IhrElPMYVgj1DGNXNuI6WpKqlNhIl2B9NJA8bWn4n1_tm6ifKGUNTv0u6w3deYWHt3g'
 unionlosangeles = Webhook.from_url(unionlosangelesHook, adapter=RequestsWebhookAdapter())
+unionjordanHook = 'https://discordapp.com/api/webhooks/749016405684518992/JcZMdfygw9xE_JiBdmGK_mNzuLJlT7vOfSfZPp-GupQ131WDf9sgWuTJG5g9itRY8PQH'
+unionjordan = Webhook.from_url(unionjordanHook, adapter=RequestsWebhookAdapter())
 
 while True:
     try:
@@ -329,5 +331,10 @@ while True:
     try:
         ScanStore('unionlosangeles_list.dat', 'https://store.unionlosangeles.com/collections/footwear/', unionlosangeles, 'option1',
                   'https://store.unionlosangeles.com/products/', 'Union (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('unionjordan_list.dat', 'https://www.unionjordanla.com/', unionjordan, 'option2',
+                  'https://www.unionjordanla.com/products/', 'Union Jordan (US)')
     except Exception as e:
         print('Failed: ' + e)
