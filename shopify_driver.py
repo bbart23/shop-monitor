@@ -216,6 +216,8 @@ unionlosangelesHook = 'https://discordapp.com/api/webhooks/748980041962225674/4I
 unionlosangeles = Webhook.from_url(unionlosangelesHook, adapter=RequestsWebhookAdapter())
 unionjordanHook = 'https://discordapp.com/api/webhooks/749016405684518992/JcZMdfygw9xE_JiBdmGK_mNzuLJlT7vOfSfZPp-GupQ131WDf9sgWuTJG5g9itRY8PQH'
 unionjordan = Webhook.from_url(unionjordanHook, adapter=RequestsWebhookAdapter())
+ovoHook = 'https://discordapp.com/api/webhooks/750105591166271609/T1j1D_o5c6qtGVD_hTO9GK2lMYGIDsKaDBhHkCMt4QHlUMiZmrjf9kDpPGU0OPGOX4PV'
+ovo = Webhook.from_url(ovoHook, adapter=RequestsWebhookAdapter())
 
 while True:
     try:
@@ -276,5 +278,10 @@ while True:
     try:
         ScanStore('saintalfred_list.dat', 'https://www.saintalfred.com/collections/footwear/', saintalfred, 'option1',
                   'https://www.saintalfred.com/collections/footwear/products/', 'Saint Alfred (US)')
+    except Exception as e:
+        print('Failed: ' + e)
+    try:
+        ScanStore('ovo_list.dat', 'https://us.octobersveryown.com/', ovo, 'option1',
+                  'https://us.octobersveryown.com/products/', 'OVO (US)')
     except Exception as e:
         print('Failed: ' + e)
