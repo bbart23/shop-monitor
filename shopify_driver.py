@@ -7,6 +7,7 @@ import re
 from discord import Webhook, RequestsWebhookAdapter
 from siteItem import SiteItem
 from os import path
+from simple_requests import Requests
 
 jordanHook = 'https://discordapp.com/api/webhooks/739924749127516291/Q3rX5AenW1d9E7vB9BA8HBncLmk8u0Y2z3zHR9mMjKqpUZTI_sDqyRl4xM_HN9gatMJk'
 yeezyHook = 'https://discordapp.com/api/webhooks/739927902786945105/TnD1CAjmWdJHj5AEiIsbq1SmEr1kD92z6l37qCdBKTuI67_YErcgFSM8buui2cSoMNo1'
@@ -218,70 +219,36 @@ unionjordanHook = 'https://discordapp.com/api/webhooks/749016405684518992/JcZMdf
 unionjordan = Webhook.from_url(unionjordanHook, adapter=RequestsWebhookAdapter())
 ovoHook = 'https://discordapp.com/api/webhooks/750105591166271609/T1j1D_o5c6qtGVD_hTO9GK2lMYGIDsKaDBhHkCMt4QHlUMiZmrjf9kDpPGU0OPGOX4PV'
 ovo = Webhook.from_url(ovoHook, adapter=RequestsWebhookAdapter())
+likelihoodHook = 'https://discordapp.com/api/webhooks/754110708773290034/P-mCOnD-PJ-TLkN4eBc1eQJKf89_nnZTn64UHhqbqhG73W4AryVl2X2sS_WgFVdLECcV'
+likelihood = Webhook.from_url(likelihoodHook, adapter=RequestsWebhookAdapter())
 
 while True:
-    try:
-        ScanStore('amamaniere_list.dat', 'https://www.a-ma-maniere.com/collections/sneakers/', maniere, 'option2',
+    ScanStore('amamaniere_list.dat', 'https://www.a-ma-maniere.com/collections/sneakers/', maniere, 'option2',
                 'https://www.a-ma-maniere.com/products/', 'A Ma Maniere (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('antisocial_list.dat', 'https://www.antisocialsocialclub.com/', antiSocial, 'option1',
+    ScanStore('antisocial_list.dat', 'https://www.antisocialsocialclub.com/', antiSocial, 'option1',
                   'https://www.antisocialsocialclub.com/products/', 'Anti Social Social Club (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('chinatown_list.dat', 'https://thechinatownmarket.com/', chinatown, 'option2',
+    ScanStore('chinatown_list.dat', 'https://thechinatownmarket.com/', chinatown, 'option2',
                   'https://thechinatownmarket.com/products/', 'Chinatown Market (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('darkside_list.dat', 'https://www.thedarksideinitiative.com/collections/footwear/', darkside, 'option1',
+    ScanStore('darkside_list.dat', 'https://www.thedarksideinitiative.com/collections/footwear/', darkside, 'option1',
                   'https://www.thedarksideinitiative.com/collections/footwear/products/', 'The Darkside Initiative (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('dopefactory_list.dat', 'https://www.dope-factory.com/collections/sneakers/', dopefactory, 'option1',
+    ScanStore('dopefactory_list.dat', 'https://www.dope-factory.com/collections/sneakers/', dopefactory, 'option1',
                   'https://www.dope-factory.com/products/', 'Dope Factory (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('extrabutter_list.dat', 'https://extrabutterny.com/collections/footwear/', extrabutter, 'option1',
+    ScanStore('extrabutter_list.dat', 'https://extrabutterny.com/collections/footwear/', extrabutter, 'option1',
                   'https://extrabutterny.com/collections/footwear/products/', 'Extra Butter (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('limitededt_list.dat', 'https://limitededt.com/collections/mens/', limitededt, 'option1',
+    ScanStore('limitededt_list.dat', 'https://limitededt.com/collections/mens/', limitededt, 'option1',
                   'https://limitededt.com/collections/mens/products/', 'Limited Edt (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('nrml_list.dat', 'https://nrml.ca/collections/mens-footwear/', nrml, 'option1',
+    ScanStore('nrml_list.dat', 'https://nrml.ca/collections/mens-footwear/', nrml, 'option1',
                   'https://nrml.ca/collections/mens-footwear/products/', 'NRML (CA)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('ricchezza_list.dat', 'https://ricchezzaforever.com/collections/all/', ricchezza, 'option1',
+    ScanStore('ricchezza_list.dat', 'https://ricchezzaforever.com/collections/all/', ricchezza, 'option1',
                   'https://ricchezzaforever.com/collections/all/products/', 'Ricchezza (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('rockcity_list.dat', 'https://rockcitykicks.com/collections/sn/', rockcity, 'option1',
+    ScanStore('rockcity_list.dat', 'https://rockcitykicks.com/collections/sn/', rockcity, 'option1',
                   'https://rockcitykicks.com/collections/sn/products/', 'Rock City Kicks (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('rsvpgallery_list.dat', 'https://rsvpgallery.com/collections/footwear/', rsvp, 'option1',
+    ScanStore('rsvpgallery_list.dat', 'https://rsvpgallery.com/collections/footwear/', rsvp, 'option1',
                   'https://rsvpgallery.com/collections/footwear/products/', 'RSVP Gallery (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('saintalfred_list.dat', 'https://www.saintalfred.com/collections/footwear/', saintalfred, 'option1',
+    ScanStore('saintalfred_list.dat', 'https://www.saintalfred.com/collections/footwear/', saintalfred, 'option1',
                   'https://www.saintalfred.com/collections/footwear/products/', 'Saint Alfred (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('ovo_list.dat', 'https://us.octobersveryown.com/', ovo, 'option1',
+    ScanStore('ovo_list.dat', 'https://us.octobersveryown.com/', ovo, 'option1',
                   'https://us.octobersveryown.com/products/', 'OVO (US)')
-    except Exception as e:
-        print('Failed: ' + e)
+    ScanStore('likelihood_list.dat', 'https://likelihood.us/', likelihood, 'option1',
+              'https://likelihood.us/products/', 'Likelihood (US)')
+

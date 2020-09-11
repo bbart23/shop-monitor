@@ -216,65 +216,37 @@ unionlosangelesHook = 'https://discordapp.com/api/webhooks/748980041962225674/4I
 unionlosangeles = Webhook.from_url(unionlosangelesHook, adapter=RequestsWebhookAdapter())
 unionjordanHook = 'https://discordapp.com/api/webhooks/749016405684518992/JcZMdfygw9xE_JiBdmGK_mNzuLJlT7vOfSfZPp-GupQ131WDf9sgWuTJG5g9itRY8PQH'
 unionjordan = Webhook.from_url(unionjordanHook, adapter=RequestsWebhookAdapter())
+courtsideHook = 'https://discordapp.com/api/webhooks/754109206914662430/QcZC8UsVIxzTIEodQIb3ICyRJKYFvZ68mJvfSjnwCHUt9MqrDSH8xupMr9l_Zcul19-H'
+courtside = Webhook.from_url(courtsideHook, adapter=RequestsWebhookAdapter())
+soleflyHook = 'https://discordapp.com/api/webhooks/754110032970252358/c-euBGGiIHnM8bSwt2L6miou1mAHfCgjt4_07tll0gCuIh-zKRWcI_HdsRtHGvLsl9CZ'
+solefly = Webhook.from_url(soleflyHook, adapter=RequestsWebhookAdapter())
 
 while True:
-    try:
-        ScanStore('shoegallery_list.dat', 'https://shoegallerymiami.com/', shoegallery, 'option1',
-                  'https://shoegallerymiami.com/products/', 'Shoe Gallery Miami (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('sneakerpolitics_list.dat', 'https://sneakerpolitics.com/', sneakerpolitics, 'option1',
-                  'https://sneakerpolitics.com/products/', 'Sneaker Politics (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('socialstatus_list.dat', 'https://www.socialstatuspgh.com/collections/sneakers/', socialstatus, 'option2',
-                  'https://www.socialstatuspgh.com/collections/sneakers/products/', 'Social Status (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('soleclassics_list.dat', 'https://soleclassics.com/collections/shoes/', soleclassics, 'option1',
-                  'https://soleclassics.com/collections/shoes/products/', 'Sole Classics (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('thecloset_list.dat', 'https://www.theclosetinc.com/collections/mens-footwear/', closet, 'option1',
-                  'https://www.theclosetinc.com/collections/mens-footwear/products/', 'The Closet Inc (CA)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('travisscott_list.dat', 'https://shop.travisscott.com/', travisscott, 'option2',
-                  'https://shop.travisscott.com/products/', 'Travis Scott (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('undefeated_list.dat', 'https://undefeated.com/collections/mens-footwear/', undefeated, 'option2',
-                  'https://undefeated.com/collections/mens-footwear/products/', 'Undefeated Footwear (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('unknwn_list.dat', 'https://www.unknwn.com/collections/footwear/', unknwn, 'option2',
-                  'https://www.unknwn.com/collections/footwear/products/', 'UNKNWN Footwear (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('westnyc_list.dat', 'https://www.westnyc.com/collections/footwear/', westnyc, 'option1',
-                  'https://www.westnyc.com/collections/footwear/products/', 'West NYC (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('nicekicks_list.dat', 'https://shopnicekicks.com/collections/mens-kicks/', nicekicks, 'option1',
-                  'https://shopnicekicks.com/collections/mens-kicks/products/', 'Nice Kicks (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('unionlosangeles_list.dat', 'https://store.unionlosangeles.com/collections/footwear/', unionlosangeles, 'option1',
-                  'https://store.unionlosangeles.com/products/', 'Union (US)')
-    except Exception as e:
-        print('Failed: ' + e)
-    try:
-        ScanStore('unionjordan_list.dat', 'https://www.unionjordanla.com/', unionjordan, 'option2',
-                  'https://www.unionjordanla.com/products/', 'Union Jordan (US)')
-    except Exception as e:
-        print('Failed: ' + e)
+    ScanStore('shoegallery_list.dat', 'https://shoegallerymiami.com/', shoegallery, 'option1',
+                'https://shoegallerymiami.com/products/', 'Shoe Gallery Miami (US)')
+    ScanStore('sneakerpolitics_list.dat', 'https://sneakerpolitics.com/', sneakerpolitics, 'option1',
+                'https://sneakerpolitics.com/products/', 'Sneaker Politics (US)')
+    ScanStore('socialstatus_list.dat', 'https://www.socialstatuspgh.com/collections/sneakers/', socialstatus, 'option2',
+                'https://www.socialstatuspgh.com/collections/sneakers/products/', 'Social Status (US)')
+    ScanStore('soleclassics_list.dat', 'https://soleclassics.com/collections/shoes/', soleclassics, 'option1',
+                'https://soleclassics.com/collections/shoes/products/', 'Sole Classics (US)')
+    ScanStore('thecloset_list.dat', 'https://www.theclosetinc.com/collections/mens-footwear/', closet, 'option1',
+                'https://www.theclosetinc.com/collections/mens-footwear/products/', 'The Closet Inc (CA)')
+    ScanStore('travisscott_list.dat', 'https://shop.travisscott.com/', travisscott, 'option2',
+                'https://shop.travisscott.com/products/', 'Travis Scott (US)')
+    ScanStore('undefeated_list.dat', 'https://undefeated.com/collections/mens-footwear/', undefeated, 'option2',
+                'https://undefeated.com/collections/mens-footwear/products/', 'Undefeated Footwear (US)')
+    ScanStore('unknwn_list.dat', 'https://www.unknwn.com/collections/footwear/', unknwn, 'option2',
+                'https://www.unknwn.com/collections/footwear/products/', 'UNKNWN Footwear (US)')
+    ScanStore('westnyc_list.dat', 'https://www.westnyc.com/collections/footwear/', westnyc, 'option1',
+                'https://www.westnyc.com/collections/footwear/products/', 'West NYC (US)')
+    ScanStore('nicekicks_list.dat', 'https://shopnicekicks.com/collections/mens-kicks/', nicekicks, 'option1',
+                'https://shopnicekicks.com/collections/mens-kicks/products/', 'Nice Kicks (US)')
+    ScanStore('unionlosangeles_list.dat', 'https://store.unionlosangeles.com/collections/footwear/', unionlosangeles, 'option1',
+                'https://store.unionlosangeles.com/products/', 'Union (US)')
+    ScanStore('unionjordan_list.dat', 'https://www.unionjordanla.com/', unionjordan, 'option2',
+                'https://www.unionjordanla.com/products/', 'Union Jordan (US)')
+    ScanStore('courtside_list.dat', 'https://www.courtsidesneakers.com/', courtside, 'option2',
+              'https://www.courtsidesneakers.com/products/', 'Courtside Sneakers (US)')
+    ScanStore('solefly_list.dat', 'https://www.solefly.com/', solefly, 'option1',
+              'https://www.solefly.com/products/', 'SoleFly (US)')
