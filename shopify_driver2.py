@@ -220,6 +220,8 @@ courtsideHook = 'https://discordapp.com/api/webhooks/754109206914662430/QcZC8UsV
 courtside = Webhook.from_url(courtsideHook, adapter=RequestsWebhookAdapter())
 soleflyHook = 'https://discordapp.com/api/webhooks/754110032970252358/c-euBGGiIHnM8bSwt2L6miou1mAHfCgjt4_07tll0gCuIh-zKRWcI_HdsRtHGvLsl9CZ'
 solefly = Webhook.from_url(soleflyHook, adapter=RequestsWebhookAdapter())
+featureHook = 'https://discordapp.com/api/webhooks/757710537718235257/FF5weZewwR-W2eKH2WFzZQbdH7oFQQLsoXU8eCf-37wLbHhHDB0jAIfTDsWwqmdJdOq2'
+feature = Webhook.from_url(featureHook, adapter=RequestsWebhookAdapter())
 
 while True:
     ScanStore('shoegallery_list.dat', 'https://shoegallerymiami.com/', shoegallery, 'option1',
@@ -250,3 +252,5 @@ while True:
               'https://www.courtsidesneakers.com/products/', 'Courtside Sneakers (US)')
     ScanStore('solefly_list.dat', 'https://www.solefly.com/', solefly, 'option1',
               'https://www.solefly.com/products/', 'SoleFly (US)')
+    ScanStore('feature_list.dat', 'https://feature.com/', feature, 'option2',
+              'https://feature.com/products/', 'Feature (US)')

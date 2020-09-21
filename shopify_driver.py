@@ -220,6 +220,8 @@ ovoHook = 'https://discordapp.com/api/webhooks/750105591166271609/T1j1D_o5c6qtGV
 ovo = Webhook.from_url(ovoHook, adapter=RequestsWebhookAdapter())
 likelihoodHook = 'https://discordapp.com/api/webhooks/754110708773290034/P-mCOnD-PJ-TLkN4eBc1eQJKf89_nnZTn64UHhqbqhG73W4AryVl2X2sS_WgFVdLECcV'
 likelihood = Webhook.from_url(likelihoodHook, adapter=RequestsWebhookAdapter())
+renartsHook = 'https://discordapp.com/api/webhooks/757709295688220753/96nzWvk6_UGoZ_PK1jJctw_NvZwGLoP5WvRDbl2Qiz3m8t7pMI6p-MKLeZ646DsgZ0mQ'
+renarts = Webhook.from_url(renartsHook, adapter=RequestsWebhookAdapter())
 
 while True:
     ScanStore('amamaniere_list.dat', 'https://www.a-ma-maniere.com/collections/sneakers/', maniere, 'option2',
@@ -250,4 +252,6 @@ while True:
                   'https://us.octobersveryown.com/products/', 'OVO (US)')
     ScanStore('likelihood_list.dat', 'https://likelihood.us/', likelihood, 'option1',
               'https://likelihood.us/products/', 'Likelihood (US)')
+    ScanStore('renarts_list.dat', 'https://renarts.com/', renarts, 'option1',
+              'https://renarts.com/products/', 'Renarts (US)')
 
