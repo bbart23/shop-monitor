@@ -11,10 +11,12 @@ from os import path
 jordanHook = 'https://discordapp.com/api/webhooks/739924749127516291/Q3rX5AenW1d9E7vB9BA8HBncLmk8u0Y2z3zHR9mMjKqpUZTI_sDqyRl4xM_HN9gatMJk'
 yeezyHook = 'https://discordapp.com/api/webhooks/739927902786945105/TnD1CAjmWdJHj5AEiIsbq1SmEr1kD92z6l37qCdBKTuI67_YErcgFSM8buui2cSoMNo1'
 nikesbHook = 'https://discordapp.com/api/webhooks/739927996391227493/oZdCOwhdb7uErLSiujwz452Cyja6Fg1lw_1li_25D190BmKrTuSsO0wdmW0uiG90Grip'
+offwhiteHook = 'https://discordapp.com/api/webhooks/759493918856314901/prYkYK5AHWYPkFSHH748bYlysot0cfzdNSr3t_xzIg0lGpMnAYWJho731t9FByPVWA2C'
 
 jordan = Webhook.from_url(jordanHook, adapter=RequestsWebhookAdapter())
 yeezy = Webhook.from_url(yeezyHook, adapter=RequestsWebhookAdapter())
 nikesb = Webhook.from_url(nikesbHook, adapter=RequestsWebhookAdapter())
+offwhite = Webhook.from_url(offwhiteHook, adapter=RequestsWebhookAdapter())
 
 def FileCheck(filename):
     global ItemList
@@ -129,6 +131,9 @@ def ScanStore(filename, collectionLink, webhook, sizeOption, productLink, storeN
                             if 'nike' in ItemName.lower() and ('sb' in ItemName.lower() or 'dunk' in ItemName.lower()):
                                 SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture,
                                                    sizeString, nikesb, storeName, collectionLink)
+                            if 'off-white' in ItemName.lower() or ('off' in ItemName.lower() and 'white' in ItemName.lower()):
+                                SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'RESTOCK', ItemLink, ItemPicture,
+                                                   sizeString, offwhite, storeName, collectionLink)
                         except:
                             print('ERROR: Couldn\'t send message. Product Type: '+ product['product_type'].lower())
                     else:
@@ -144,6 +149,9 @@ def ScanStore(filename, collectionLink, webhook, sizeOption, productLink, storeN
                             if 'nike' in ItemName.lower() and ('sb' in ItemName.lower() or 'dunk' in ItemName.lower()):
                                 SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'Sold Out', ItemLink, ItemPicture,
                                                    sizeString, nikesb, storeName, collectionLink)
+                            if 'off-white' in ItemName.lower() or ('off' in ItemName.lower() and 'white' in ItemName.lower()):
+                                SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'Sold Out', ItemLink, ItemPicture,
+                                                   sizeString, offwhite, storeName, collectionLink)
                         except:
                             print('ERROR: Couldn\'t send message. Product Type: '+ product['product_type'].lower())
                     ItemList.pop(index)
@@ -162,6 +170,9 @@ def ScanStore(filename, collectionLink, webhook, sizeOption, productLink, storeN
                         if 'nike' in ItemName.lower() and ('sb' in ItemName.lower() or 'dunk' in ItemName.lower()):
                             SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture,
                                                sizeString, nikesb, storeName, collectionLink)
+                        if 'off-white' in ItemName.lower() or ('off' in ItemName.lower() and 'white' in ItemName.lower()):
+                            SendDiscordMessage(ItemName, ItemColor, ItemPrice, 'In Stock', ItemLink, ItemPicture,
+                                               sizeString, offwhite, storeName, collectionLink)
                     except:
                         print('ERROR: Couldn\'t send message. Product Type: ' + product['product_type'].lower())
                 ItemList.append(temp)
