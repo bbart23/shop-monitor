@@ -233,6 +233,8 @@ soleflyHook = 'https://discordapp.com/api/webhooks/754110032970252358/c-euBGGiIH
 solefly = Webhook.from_url(soleflyHook, adapter=RequestsWebhookAdapter())
 featureHook = 'https://discordapp.com/api/webhooks/757710537718235257/FF5weZewwR-W2eKH2WFzZQbdH7oFQQLsoXU8eCf-37wLbHhHDB0jAIfTDsWwqmdJdOq2'
 feature = Webhook.from_url(featureHook, adapter=RequestsWebhookAdapter())
+bbcHook = 'https://discordapp.com/api/webhooks/761725564767567882/5e50eCyJ8fDkfuTn44Zp7-R1sK9sWsip_KphUGc18jGmjmNYjaBjna1xviz0c2Y5636i'
+bbc = Webhook.from_url(bbcHook, adapter=RequestsWebhookAdapter())
 
 while True:
     ScanStore('shoegallery_list.dat', 'https://shoegallerymiami.com/', shoegallery, 'option1',
@@ -265,3 +267,5 @@ while True:
               'https://www.solefly.com/products/', 'SoleFly (US)')
     ScanStore('feature_list.dat', 'https://feature.com/', feature, 'option2',
               'https://feature.com/products/', 'Feature (US)')
+    ScanStore('bbc_list.dat', 'https://www.bbcicecream.com/', bbc, 'option2',
+              'https://www.bbcicecream.com/products/', 'BBC (US)')
