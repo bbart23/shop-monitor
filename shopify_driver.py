@@ -233,6 +233,8 @@ likelihoodHook = 'https://discordapp.com/api/webhooks/754110708773290034/P-mCOnD
 likelihood = Webhook.from_url(likelihoodHook, adapter=RequestsWebhookAdapter())
 renartsHook = 'https://discordapp.com/api/webhooks/757709295688220753/96nzWvk6_UGoZ_PK1jJctw_NvZwGLoP5WvRDbl2Qiz3m8t7pMI6p-MKLeZ646DsgZ0mQ'
 renarts = Webhook.from_url(renartsHook, adapter=RequestsWebhookAdapter())
+dtlrHook = 'https://discordapp.com/api/webhooks/762767951270117376/p5DWyw31dGLD3afMdeXJnNljNmT545iYqv9YMCDw3Ei5_wT7Pmo7-u8RAFjJF3jLUqxK'
+dtlr = Webhook.from_url(dtlrHook, adapter=RequestsWebhookAdapter())
 
 while True:
     ScanStore('amamaniere_list.dat', 'https://www.a-ma-maniere.com/collections/sneakers/', maniere, 'option2',
@@ -265,4 +267,6 @@ while True:
               'https://likelihood.us/products/', 'Likelihood (US)')
     ScanStore('renarts_list.dat', 'https://renarts.com/', renarts, 'option1',
               'https://renarts.com/products/', 'Renarts (US)')
+    ScanStore('dtlr_list.dat', 'https://www.dtlr.com/collections/men-footwear/', dtlr, 'option1',
+              'https://www.dtlr.com/products/', 'DTLR (US)')
 
