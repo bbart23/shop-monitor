@@ -40,6 +40,7 @@ shoesHook = 'https://discordapp.com/api/webhooks/720720113371840534/XA-1s3t1ynsq
             '-QbK21qJUBWfitvwauuaRFYkQ5Q54bNnZs_2zFhGi '
 skateHook = 'https://discordapp.com/api/webhooks/720720159333023815' \
             '/IuZzeFJgK0gc2bjKMjTTkRe9ZlEZmLeGfdJLzCs1lAEbTEKlsOqJDj7gNe8EeVR2z9ae '
+tshirtsHook = 'https://discordapp.com/api/webhooks/763893918885740614/2-wvupQVPf3s0raMTn_aj0lvlRKU15GcHsUYn2rZKs2UNjxqa3__-lrx2609Fnka7buM'
 
 jackets = Webhook.from_url(jacketsHook, adapter=RequestsWebhookAdapter())
 shirts = Webhook.from_url(shirtsHook, adapter=RequestsWebhookAdapter())
@@ -52,6 +53,7 @@ bags = Webhook.from_url(bagsHook, adapter=RequestsWebhookAdapter())
 accessories = Webhook.from_url(accessoriesHook, adapter=RequestsWebhookAdapter())
 shoes = Webhook.from_url(shoesHook, adapter=RequestsWebhookAdapter())
 skate = Webhook.from_url(skateHook, adapter=RequestsWebhookAdapter())
+tshirts = Webhook.from_url(tshirtsHook, adapter=RequestsWebhookAdapter())
 
 
 def ExistsInList(item):
@@ -91,7 +93,8 @@ switcher = {
     'bags': bags,
     'accessories': accessories,
     'shoes': shoes,
-    'skate': skate
+    'skate': skate,
+    't-shirts': tshirts
 }
 
 while True:
